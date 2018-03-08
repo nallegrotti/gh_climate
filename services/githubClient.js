@@ -56,6 +56,7 @@ self.getUserRepositoriesInfo = (username) => {
 		.spread((cityName, reposDates) => {
 			return {
 				user: username,
+				city: cityName,
 				repositiries_qty: reposDates.length,
 				average_temperature: reposDates.map(date => ({date: date}))
 			}

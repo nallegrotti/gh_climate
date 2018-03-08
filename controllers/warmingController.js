@@ -1,4 +1,5 @@
 const githubClient = require('../services/githubClient')
+	  climateClient = require('../services/climateClient')
 
 const self = {}
 
