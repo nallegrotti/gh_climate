@@ -25,13 +25,17 @@ self.getAverageTemperatureFor = (date, city) => {
 		.end((response) => {
 			if(response.status == 200){
 				// console.log('weather for', date, 'before', endDate, 'in', city, 'was', response.body)
-				const weather = response.body
-				const hourly = [].concat.apply([],weather.data.weather.map(w => w.hourly.map(h => 1*h.tempC)))
-				const sum = hourly.reduce((a,b) => a + b, 0)
-				// console.log('por hora=', sum, 'promedio=', sum/hourly.length)
-				d.resolve(sum / hourly.length)
+				try{
+					const weather = response.body
+					const hourly = [].concat.apply([],weather.data.weather.map(w => w.hourly.map(h => 1*h.tempC)))
+					const sum = hourly.reduce((a,b) => a + b, 0)
+					// console.log('por hora=', sum, 'promedio=', sum/hourly.length)
+					d.resolve(sum / hourly.length)
+				}catch(err){
+					d.reject({error: err})
+				}
 			}else{
-				d.reject(response.body)
+				d.reject({error:response.body})
 			}
 		})
 	return d.promise
