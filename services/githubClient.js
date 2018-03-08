@@ -48,6 +48,18 @@ self.getUserRepositoriesDates = (username) => {
 	return d.promise
 }
 
+self.getUserRepositoriesInfo = (username) => {
+	const city = self.getUserCity(username)
+	const reposDatePromise = self.getUserRepositoriesDates(username)
 
+	return Q.all([city, reposDatePromise])
+		.spread((cityName, reposDates) => {
+			return {
+				user: username,
+				repositiries_qty: reposDates.length,
+				average_temperature: reposDates.map(date => ({date: date}))
+			}
+		})
+}
 
 module.exports = self

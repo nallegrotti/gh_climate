@@ -1,17 +1,20 @@
+const githubClient = require('../services/githubClient')
 
-
-self = {}
+const self = {}
 
 self.warming = (req, res, next) => {
 	let user = req.params.user
 
-	res.json( {
-		"user": user, 
-		"repositories_qty": 1, 
-		"average_temperature": [
-			{"date": "2015-06-14T00:36:05Z", "average_temperature": 10.5625}
-		]
-	} )
+	console.log('user=', user)
+	githubClient.getUserRepositoriesInfo(user)
+		.then(userInfo => {
+			res.json( userInfo )
+		})
+		.catch(err => {
+			err.status = 500
+			next(err)
+		})
+
 }
 
 module.exports = self

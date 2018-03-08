@@ -18,4 +18,15 @@ describe('Github API', () => {
 				expect(Date.parse(reposDates[0])).to.be.ok
 			})
 	})
+
+	it("should return the user's city and repositories dates", () => {
+		return githubClient.getUserRepositoriesInfo('impronunciable')
+			.then((userRepoData) => {
+				expect(userRepoData.user).to.be.equal('impronunciable')
+				expect(userRepoData.repositiries_qty).to.be.above(1)
+				expect(userRepoData.average_temperature).to.have.lengthOf.above(1)
+				expect(Date.parse(userRepoData.average_temperature[0].date)).to.be.ok
+
+			})
+	})
 })
