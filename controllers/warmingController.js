@@ -1,5 +1,6 @@
-const githubClient = require('../services/githubClient')
-	  climateClient = require('../services/climateClient')
+const githubClient = require('../services/githubClient'),
+	  climateClient = require('../services/climateClient'),
+	  Q = require('q')
 
 const self = {}
 
@@ -9,7 +10,15 @@ self.warming = (req, res, next) => {
 	console.log('user=', user)
 	githubClient.getUserRepositoriesInfo(user)
 		.then(userInfo => {
-			res.json( userInfo )
+			const results = userInfo.average_temperature.map(temp => {
+				console.log('temp=', temp, 'city=', userInfo.city)
+				return climateClient.getAverageTemperatureFor(new Date(temp.date), userInfo.city) 
+					.then(averageTemp => temp.temperature =  averageTemp)
+			})
+
+			return Q.all(results).then( __ => {
+				res.json( userInfo )
+			})
 		})
 		.catch(err => {
 			err.status = 500
