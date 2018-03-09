@@ -1,5 +1,4 @@
 let expect = require('chai').expect,
-	rewire = require('rewire'),
 	githubClient = require('../services/githubClient'),
 	climateClient = require('../services/climateClient'),
 	Q = require('q')
